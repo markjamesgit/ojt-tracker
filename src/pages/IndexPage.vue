@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <h1>OJT Tracker Test one</h1>
+    <h1>OJT Tracker Test</h1>
 
     <div v-if="students.length">
       <q-list bordered separator>
