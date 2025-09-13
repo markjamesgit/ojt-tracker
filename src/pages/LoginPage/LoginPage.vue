@@ -8,10 +8,12 @@
 
       <q-btn label="Login" color="primary" class="full-width" @click="onLogin" />
 
-      <q-btn flat label="Resend verification email" class="q-mt-sm" @click="resendEmail" />
-
       <q-banner v-if="message" class="q-mt-md bg-red text-white">
         {{ message }}
+        <div v-if="message.includes('verify')">
+          <!-- Button that calls goResend -->
+          <q-btn flat label="Resend Verification Email" color="white" @click="goResend" />
+        </div>
       </q-banner>
     </div>
   </q-page>
@@ -19,13 +21,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { loginUser, resendVerificationEmail } from '../../stores/auth'
-import { auth } from '../../firebase/index'
+import { loginUser } from '../../stores/auth'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const email = ref('')
 const password = ref('')
 const message = ref('')
-let currentUser = null
 
 async function onLogin() {
   try {
@@ -34,24 +36,18 @@ async function onLogin() {
 
     // Redirect based on role
     if (user.role === 'superadmin') {
-      window.location.href = '/dashboard/admin'
+      await router.push('/superadmin/dashboard')
     } else if (user.role === 'adviser') {
-      window.location.href = '/dashboard/adviser'
+      await router.push('/adviser/dashboard')
     } else {
-      window.location.href = '/dashboard/student'
+      await router.push('/student/dashboard')
     }
   } catch (err) {
     message.value = err.message
   }
 }
 
-async function resendEmail() {
-  if (!currentUser) currentUser = auth.currentUser
-  if (currentUser) {
-    await resendVerificationEmail(currentUser)
-    message.value = 'Verification email resent!'
-  } else {
-    message.value = 'Please try logging in first.'
-  }
+function goResend() {
+  router.push('/resend-verification')
 }
 </script>

@@ -5,11 +5,16 @@ import StudentLayout from 'layouts/StudentLayout.vue'
 
 import LoginPage from 'pages/LoginPage/LoginPage.vue'
 import ErrorNotFound from 'pages/ErrorNotFound.vue'
+import VerifyEmailPage from 'pages/VerifyEmailPage/VerifyEmailPage.vue'
+import ResendVerificationPage from 'pages/ResendVerificationPage/ResendVerificationPage.vue'
 
 // Role dashboards
 import DashboardSuperAdmin from 'pages/Roles/SuperAdmin/DashboardPage.vue'
 import DashboardAdviser from 'pages/Roles/Adviser/DashboardPage.vue'
 import DashboardStudent from 'pages/Roles/Students/DashboardPage.vue'
+
+// Super Admin pages
+import ManageUsersPage from 'pages/Roles/SuperAdmin/ManageUserPage/ManageUsersPage.vue'
 
 const routes = [
   // Public (login + redirect)
@@ -19,6 +24,8 @@ const routes = [
     children: [
       { path: '', redirect: '/login' },
       { path: 'login', component: LoginPage },
+      { path: 'verify-email', component: VerifyEmailPage },
+      { path: 'resend-verification', component: ResendVerificationPage },
     ],
   },
 
@@ -26,7 +33,10 @@ const routes = [
   {
     path: '/superadmin',
     component: SuperAdminLayout,
-    children: [{ path: 'dashboard', component: DashboardSuperAdmin }],
+    children: [
+      { path: 'dashboard', component: DashboardSuperAdmin },
+      { path: 'manage-users', component: ManageUsersPage },
+    ],
     meta: { requiresAuth: true, role: 'superadmin' },
   },
 
